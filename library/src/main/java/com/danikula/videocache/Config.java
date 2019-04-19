@@ -7,6 +7,8 @@ import com.danikula.videocache.sourcestorage.SourceInfoStorage;
 
 import java.io.File;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Configuration for proxy cache.
  *
@@ -19,18 +21,28 @@ class Config {
     public final DiskUsage diskUsage;
     public final SourceInfoStorage sourceInfoStorage;
     public final HeaderInjector headerInjector;
+    public final SourceType sourceType;
+    private OkHttpClient okHttpClient = null;
 
-    Config(File cacheRoot, FileNameGenerator fileNameGenerator, DiskUsage diskUsage, SourceInfoStorage sourceInfoStorage, HeaderInjector headerInjector) {
+    Config(File cacheRoot, FileNameGenerator fileNameGenerator, DiskUsage diskUsage, SourceInfoStorage sourceInfoStorage, HeaderInjector headerInjector, SourceType sourceType) {
         this.cacheRoot = cacheRoot;
         this.fileNameGenerator = fileNameGenerator;
         this.diskUsage = diskUsage;
         this.sourceInfoStorage = sourceInfoStorage;
         this.headerInjector = headerInjector;
+        this.sourceType = sourceType;
     }
 
     File generateCacheFile(String url) {
         String name = fileNameGenerator.generate(url);
         return new File(cacheRoot, name);
+    }
+
+    OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient();
+        }
+        return okHttpClient;
     }
 
 }

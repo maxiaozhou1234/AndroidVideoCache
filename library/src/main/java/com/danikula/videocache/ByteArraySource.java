@@ -35,5 +35,20 @@ public class ByteArraySource implements Source {
     @Override
     public void close() throws ProxyCacheException {
     }
+
+    @Override
+    public String getMime() throws ProxyCacheException {
+        return null;
+    }
+
+    @Override
+    public String getUrl() {
+        return null;
+    }
+
+    @Override
+    public Source copy() {
+        return null;
+    }
 }
 

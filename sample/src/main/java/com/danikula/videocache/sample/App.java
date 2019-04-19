@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.danikula.videocache.SourceType;
 
 /**
  * @author Alexey Danilov (danikula@gmail.com).
@@ -20,6 +21,7 @@ public class App extends Application {
     private HttpProxyCacheServer newProxy() {
         return new HttpProxyCacheServer.Builder(this)
                 .cacheDirectory(Utils.getVideoCacheDir(this))
+                .sourceType(SourceType.OKHTTP_SOURCE)
                 .build();
     }
 }

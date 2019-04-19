@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.viewpagerindicator.CirclePageIndicator;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -14,14 +12,14 @@ import org.androidannotations.annotations.ViewById;
 @EActivity(R.layout.activity_video_gallery)
 public class VideoGalleryActivity extends FragmentActivity {
 
-    @ViewById ViewPager viewPager;
-    @ViewById CirclePageIndicator viewPagerIndicator;
+    @ViewById
+    ViewPager viewPager;
+//    @ViewById CirclePageIndicator viewPagerIndicator;
 
     @AfterViews
     void afterViewInjected() {
         ViewsPagerAdapter viewsPagerAdapter = new ViewsPagerAdapter(this);
         viewPager.setAdapter(viewsPagerAdapter);
-        viewPagerIndicator.setViewPager(viewPager);
     }
 
     private static final class ViewsPagerAdapter extends FragmentStatePagerAdapter {

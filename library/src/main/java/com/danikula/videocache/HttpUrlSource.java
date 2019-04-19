@@ -135,7 +135,7 @@ public class HttpUrlSource implements Source {
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
         try {
-            urlConnection = openConnection(0, 10000);
+            urlConnection = openConnectionForHead( 10000);
             long length = getContentLength(urlConnection);
             String mime = urlConnection.getContentType();
             inputStream = urlConnection.getInputStream();
@@ -182,6 +182,37 @@ public class HttpUrlSource implements Source {
         return connection;
     }
 
+    private HttpURLConnection openConnectionForHead(int timeout) throws IOException, ProxyCacheException {
+        HttpURLConnection connection;
+        boolean redirected;
+        int redirectCount = 0;
+        String url = this.sourceInfo.url;
+        do {
+//            LOG.debug("Open connection " + (offset > 0 ? " with offset " + offset : "") + " to " + url);
+            connection = (HttpURLConnection) new URL(url).openConnection();
+//            injectCustomHeaders(connection, url);
+//            if (offset > 0) {
+//                connection.setRequestProperty("Range", "bytes=" + offset + "-");
+//            }
+            if (timeout > 0) {
+                connection.setConnectTimeout(timeout);
+                connection.setReadTimeout(timeout);
+            }
+            connection.setRequestMethod("HEAD");
+            int code = connection.getResponseCode();
+            redirected = code == HTTP_MOVED_PERM || code == HTTP_MOVED_TEMP || code == HTTP_SEE_OTHER;
+            if (redirected) {
+                url = connection.getHeaderField("Location");
+                redirectCount++;
+                connection.disconnect();
+            }
+            if (redirectCount > MAX_REDIRECTS) {
+                throw new ProxyCacheException("Too many redirects: " + redirectCount);
+            }
+        } while (redirected);
+        return connection;
+    }
+
     private void injectCustomHeaders(HttpURLConnection connection, String url) {
         Map<String, String> extraHeaders = headerInjector.addHeaders(url);
         for (Map.Entry<String, String> header : extraHeaders.entrySet()) {
@@ -189,6 +220,7 @@ public class HttpUrlSource implements Source {
         }
     }
 
+    @Override
     public synchronized String getMime() throws ProxyCacheException {
         if (TextUtils.isEmpty(sourceInfo.mime)) {
             fetchContentInfo();
@@ -196,6 +228,7 @@ public class HttpUrlSource implements Source {
         return sourceInfo.mime;
     }
 
+    @Override
     public String getUrl() {
         return sourceInfo.url;
     }
@@ -203,5 +236,10 @@ public class HttpUrlSource implements Source {
     @Override
     public String toString() {
         return "HttpUrlSource{sourceInfo='" + sourceInfo + "}";
+    }
+
+    @Override
+    public Source copy() {
+        return new HttpUrlSource(this);
     }
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.VideoView;
 
 import com.danikula.videocache.CacheListener;
@@ -24,11 +25,15 @@ public class VideoFragment extends Fragment implements CacheListener {
 
     private static final String LOG_TAG = "VideoFragment";
 
-    @FragmentArg String url;
+    @FragmentArg
+    String url;
 
-    @ViewById ImageView cacheStatusImageView;
-    @ViewById VideoView videoView;
-    @ViewById ProgressBar progressBar;
+    @ViewById
+    ImageView cacheStatusImageView;
+    @ViewById
+    VideoView videoView;
+    @ViewById
+    SeekBar progressBar;
 
     private final VideoProgressUpdater updater = new VideoProgressUpdater();
 
@@ -59,7 +64,8 @@ public class VideoFragment extends Fragment implements CacheListener {
         String proxyUrl = proxy.getProxyUrl(url);
         Log.d(LOG_TAG, "Use proxy url " + proxyUrl + " instead of original url " + url);
         videoView.setVideoPath(proxyUrl);
-        videoView.start();
+        videoView.setOnPreparedListener(mp -> videoView.start());
+//        videoView.start();
     }
 
     @Override
@@ -78,7 +84,9 @@ public class VideoFragment extends Fragment implements CacheListener {
     public void onDestroy() {
         super.onDestroy();
 
-        videoView.stopPlayback();
+        if (videoView != null) {
+            videoView.stopPlayback();
+        }
         App.getProxy(getActivity()).unregisterCacheListener(this);
     }
 

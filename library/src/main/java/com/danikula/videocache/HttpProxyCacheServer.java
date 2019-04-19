@@ -114,6 +114,9 @@ public class HttpProxyCacheServer {
      * @return a wrapped by proxy url if file is not fully cached or url pointed to cache file otherwise (if {@code allowCachedFileUri} is {@code true}).
      */
     public String getProxyUrl(String url, boolean allowCachedFileUri) {
+        if (!url.toLowerCase().startsWith("http")) {//如果不是http/https开头则不是网络视频，跳过缓存
+            return url;
+        }
         if (allowCachedFileUri && isCached(url)) {
             File cacheFile = getCacheFile(url);
             touchFileSafely(cacheFile);
@@ -353,6 +356,7 @@ public class HttpProxyCacheServer {
         private DiskUsage diskUsage;
         private SourceInfoStorage sourceInfoStorage;
         private HeaderInjector headerInjector;
+        private SourceType sourceType = SourceType.OKHTTP_SOURCE;
 
         public Builder(Context context) {
             this.sourceInfoStorage = SourceInfoStorageFactory.newSourceInfoStorage(context);
@@ -442,6 +446,14 @@ public class HttpProxyCacheServer {
         }
 
         /**
+         * 下载视频源使用 okHttp 还是 HttpURLConnection，默认 okHttp
+         */
+        public Builder sourceType(SourceType sourceType) {
+            this.sourceType = sourceType;
+            return this;
+        }
+
+        /**
          * Builds new instance of {@link HttpProxyCacheServer}.
          *
          * @return proxy cache. Only single instance should be used across whole app.
@@ -452,7 +464,7 @@ public class HttpProxyCacheServer {
         }
 
         private Config buildConfig() {
-            return new Config(cacheRoot, fileNameGenerator, diskUsage, sourceInfoStorage, headerInjector);
+            return new Config(cacheRoot, fileNameGenerator, diskUsage, sourceInfoStorage, headerInjector, sourceType);
         }
 
     }

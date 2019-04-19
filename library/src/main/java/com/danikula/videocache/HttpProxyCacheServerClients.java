@@ -79,7 +79,13 @@ final class HttpProxyCacheServerClients {
     }
 
     private HttpProxyCache newHttpProxyCache() throws ProxyCacheException {
-        HttpUrlSource source = new HttpUrlSource(url, config.sourceInfoStorage, config.headerInjector);
+        Source source;
+        if (config.sourceType == SourceType.OKHTTP_SOURCE) {
+            source = new OkHttpSource(config.getOkHttpClient(), url, config.sourceInfoStorage, config.headerInjector);
+        } else {
+            source = new HttpUrlSource(url, config.sourceInfoStorage, config.headerInjector);
+        }
+//        HttpUrlSource source = new HttpUrlSource(url, config.sourceInfoStorage, config.headerInjector);
         FileCache cache = new FileCache(config.generateCacheFile(url), config.diskUsage);
         HttpProxyCache httpProxyCache = new HttpProxyCache(source, cache);
         httpProxyCache.registerCacheListener(uiCacheListener);

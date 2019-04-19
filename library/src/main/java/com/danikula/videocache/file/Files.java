@@ -51,10 +51,10 @@ class Files {
             boolean modified = file.setLastModified(now); // on some devices (e.g. Nexus 5) doesn't work
             if (!modified) {
                 modify(file);
-                if (file.lastModified() < now) {
+//                if (file.lastModified() < now) {
                     // NOTE: apparently this is a known issue (see: http://stackoverflow.com/questions/6633748/file-lastmodified-is-never-what-was-set-with-file-setlastmodified)
-                    LOG.warn("Last modified date {} is not set for file {}", new Date(file.lastModified()), file.getAbsolutePath());
-                }
+//                    LOG.warn("Last modified date {} is not set for file {}", new Date(file.lastModified()), file.getAbsolutePath());
+//                }
             }
         }
     }

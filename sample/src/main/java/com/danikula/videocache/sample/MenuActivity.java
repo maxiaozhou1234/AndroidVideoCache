@@ -22,7 +22,8 @@ import java.util.List;
 @EActivity(R.layout.activity_menu)
 public class MenuActivity extends FragmentActivity {
 
-    @ViewById ListView listView;
+    @ViewById
+    ListView listView;
 
     @AfterViews
     void onViewInjected() {
@@ -36,7 +37,8 @@ public class MenuActivity extends FragmentActivity {
                 new ListEntry("Single Video", SingleVideoActivity_.class),
                 new ListEntry("Multiple Videos", MultipleVideosActivity_.class),
                 new ListEntry("Video Gallery with pre-caching", VideoGalleryActivity_.class),
-                new ListEntry("Shared Cache", SharedCacheActivity_.class)
+                new ListEntry("Shared Cache", SharedCacheActivity_.class),
+                new ListEntry("Video Test", VideoActivity_.class)
         );
     }
 

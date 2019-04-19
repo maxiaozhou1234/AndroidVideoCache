@@ -11,13 +11,13 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.viewpagerindicator.CirclePageIndicator
-        android:id="@+id/viewPagerIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:fillColor="#800F"
-        app:radius="10dp"
-        app:strokeColor="#800F" />
+    <!--<com.viewpagerindicator.CirclePageIndicator-->
+        <!--android:id="@+id/viewPagerIndicator"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="8dp"-->
+        <!--app:fillColor="#800F"-->
+        <!--app:radius="10dp"-->
+        <!--app:strokeColor="#800F" />-->
 
 </LinearLayout>
