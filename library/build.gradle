@@ -28,5 +28,4 @@ android {
 dependencies {
     implementation 'org.slf4j:slf4j-android:1.7.21'//日志管理
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.github.jitpack:android-example:1.0.1'
 }

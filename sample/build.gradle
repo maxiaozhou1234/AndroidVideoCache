@@ -30,10 +30,11 @@ android {
 //}
 
 dependencies {
-    implementation project(':library')
+//    implementation project(':library')
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'org.androidannotations:androidannotations-api:4.5.1'
     //    implementation 'com.danikula:videocache:2.7.1'
+    implementation 'com.github.maxiaozhou1234:AndroidVideoCache:2.7.1.1'
     annotationProcessor 'org.androidannotations:androidannotations:4.5.1'
 
 }
